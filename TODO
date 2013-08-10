@@ -1,0 +1,7 @@
+* auto_label (day,week,month ...)
+* config file (json)
+* work with schedule or crontab
+* support remote backup (ssh)
+* rename function name
+* comment
+
