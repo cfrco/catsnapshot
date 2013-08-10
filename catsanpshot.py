@@ -8,6 +8,7 @@ AUTO_LABELS = {
     "hour" : lambda l,n : l.dt.date() == n.dt.date() and\
                           l.dt.hour == n.dt.hour,
 }
+DEFAULT_AUTO_LABELS = ["day","hour"]
 
 class SnapManager(object):
     @staticmethod
@@ -17,15 +18,21 @@ class SnapManager(object):
         return SnapManager(configs["snaplog_file"],
                            configs["source_path"],
                            configs["backup_path"],
-                           configs["limits"])
+                           configs["limits"],
+                           configs["auto_labels"] if "auto_labels" in configs else None)
         
-    def __init__(self,snaplog_file,source_path,backup_path,limits):
+    def __init__(self,snaplog_file,source_path,backup_path,limits,auto_labels=None):
         self.snaplog_file = snaplog_file
         self.source_path = source_path
         self.backup_path = backup_path
         self.logs = snaplog.Snaplogs(self.snaplog_file)
 
         self.limits = limits
+
+        if auto_labels== None :
+            self.auto_labels = set(DEFAULT_AUTO_LABELS)
+        else :
+            self.auto_labels = set(auto_labels)
 
     def snapshot(self):
         prev = self.logs.get_latest("")
@@ -62,6 +69,9 @@ class SnapManager(object):
 
     def auto_label(self,log):
         for label,autolabel in AUTO_LABELS.items() :
+            if not label in self.auto_labels:
+                continue
+
             latest = self.logs.get_latest(label)
             if latest!=None and autolabel(latest,log):
                 unlabel_log = self.logs.get_latest(label)
@@ -70,16 +80,6 @@ class SnapManager(object):
                 log.labels.add(label)
             else :
                 log.labels.add(label)
-
-        """
-        if self.logs.get_latest("day").dt.date == log.dt.date :
-            unlabel_log = self.logs.get_latest("day")
-            unlabel_log.labels.remove("day")
-            self.delete_empty_lable(unlabel_log)
-            log.labels.add("day")
-        else :
-            log.labels.add("day")
-        """
 
 #sm = SnapManager("/tmp/backup/log","/tmp/target","/tmp/backup/")
 sm = SnapManager.from_json("./config.example.json")
