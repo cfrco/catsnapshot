@@ -7,6 +7,8 @@ AUTO_LABELS = {
     "day" : lambda l,n : l.dt.date() == n.dt.date(),
     "hour" : lambda l,n : l.dt.date() == n.dt.date() and\
                           l.dt.hour == n.dt.hour,
+    "month" : lambda l,n : l.dt.year == n.dt.year and\
+                           l.dt.month == n.dt.year,
 }
 DEFAULT_AUTO_LABELS = ["day","hour"]
 
@@ -39,33 +41,37 @@ class SnapManager(object):
         prev_path = prev.path if prev!=None else None
         dt = snaplog.Snaplog.now()
         path = self.backup_path + snaplog.dt_logstr(dt)
-        print path
         
         r = Rsync(self.source_path,path,link_dest=prev_path)
         print r.cmd
         r.execute()
         
         log = snaplog.Snaplog(path,dt,["node"])
-        print log
         self.auto_label(log)
         self.logs.add(log)
+        print log
 
-        self.limit_check_after()
+        self.limit_check()
         self.logs.write(self.snaplog_file)
 
-    def limit_check_after(self):
+    def limit_check(self): # check limits after take a snapshot
         for k,v in self.limits.items() :
             if self.logs.count(k) > v :
                 removed_log = self.logs.get(k)[0]
                 removed_log.labels.remove(k)
 
-                self.delete_empty_label(removed_log)
+                if self.remove(removed_log,check_label=True):
+                    print "Remove : "+removed_log.path
 
-    def delete_empty_label(self,log):
-        if len(log.labels) == 0:
-            print "Removing "+log.path
+    def remove(self,log,check_label=False,rmtree=True):
+        # when check_label and log.labels is not empty ,do nothing
+        if check_label and len(log.labels) != 0: 
+            return False
+
+        self.logs.remove(log)
+        if rmtree :
             shutil.rmtree(log.path)
-            self.logs.remove(log)
+        return True
 
     def auto_label(self,log):
         for label,autolabel in AUTO_LABELS.items() :
@@ -73,10 +79,11 @@ class SnapManager(object):
                 continue
 
             latest = self.logs.get_latest(label)
-            if latest!=None and autolabel(latest,log):
+            if latest!=None and latest.dt<=log.dt and autolabel(latest,log):
                 unlabel_log = self.logs.get_latest(label)
                 unlabel_log.labels.remove(label)
-                self.delete_empty_label(unlabel_log)
+                if self.remove(unlabel_log,check_label=True):
+                    print "Remove : "+unlabel_log.path
                 log.labels.add(label)
             else :
                 log.labels.add(label)
