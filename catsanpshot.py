@@ -3,6 +3,12 @@ import snaplog
 import shutil
 import json
 
+AUTO_LABELS = {
+    "day" : lambda l,n : l.dt.date() == n.dt.date(),
+    "hour" : lambda l,n : l.dt.date() == n.dt.date() and\
+                          l.dt.hour == n.dt.hour,
+}
+
 class SnapManager(object):
     @staticmethod
     def from_json(filename):
@@ -32,7 +38,7 @@ class SnapManager(object):
         print r.cmd
         r.execute()
         
-        log = snaplog.Snaplog(path,dt,["hour"])
+        log = snaplog.Snaplog(path,dt,["node"])
         print log
         self.auto_label(log)
         self.logs.add(log)
@@ -55,6 +61,17 @@ class SnapManager(object):
             self.logs.remove(log)
 
     def auto_label(self,log):
+        for label,autolabel in AUTO_LABELS.items() :
+            latest = self.logs.get_latest(label)
+            if latest!=None and autolabel(latest,log):
+                unlabel_log = self.logs.get_latest(label)
+                unlabel_log.labels.remove(label)
+                self.delete_empty_label(unlabel_log)
+                log.labels.add(label)
+            else :
+                log.labels.add(label)
+
+        """
         if self.logs.get_latest("day").dt.date == log.dt.date :
             unlabel_log = self.logs.get_latest("day")
             unlabel_log.labels.remove("day")
@@ -62,6 +79,7 @@ class SnapManager(object):
             log.labels.add("day")
         else :
             log.labels.add("day")
+        """
 
 #sm = SnapManager("/tmp/backup/log","/tmp/target","/tmp/backup/")
 sm = SnapManager.from_json("./config.example.json")

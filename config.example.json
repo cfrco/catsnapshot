@@ -3,6 +3,7 @@
     "backup_path" : "/tmp/backup/",
     "snaplog_file" : "/tmp/backup/log",
     "limits" : {
+        "node" : 3,
         "hour" : 4,
         "day"  : 1,
         "week" : 4
