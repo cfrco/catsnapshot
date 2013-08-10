@@ -1,7 +1,7 @@
 {
     "source_path" : "/tmp/target",
     "backup_path" : "/tmp/backup/",
-    "log_file" : "/tmp/backup/log",
+    "snaplog_file" : "/tmp/backup/log",
     "limits" : {
         "hour" : 4,
         "day"  : 1,

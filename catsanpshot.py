@@ -8,16 +8,16 @@ class SnapManager(object):
     def from_json(filename):
         configs = json.load(open(filename,"r"))
 
-        return SnapManager(configs["log_file"],
+        return SnapManager(configs["snaplog_file"],
                            configs["source_path"],
                            configs["backup_path"],
                            configs["limits"])
         
-    def __init__(self,log_file,source_path,backup_path,limits):
-        self.log_file = log_file
+    def __init__(self,snaplog_file,source_path,backup_path,limits):
+        self.snaplog_file = snaplog_file
         self.source_path = source_path
         self.backup_path = backup_path
-        self.logs = snaplog.Snaplogs(self.log_file)
+        self.logs = snaplog.Snaplogs(self.snaplog_file)
 
         self.limits = limits
 
@@ -38,7 +38,7 @@ class SnapManager(object):
         self.logs.add(log)
 
         self.limit_check_after()
-        self.logs.write(self.log_file)
+        self.logs.write(self.snaplog_file)
 
     def limit_check_after(self):
         for k,v in self.limits.items() :
@@ -65,5 +65,4 @@ class SnapManager(object):
 
 #sm = SnapManager("/tmp/backup/log","/tmp/target","/tmp/backup/")
 sm = SnapManager.from_json("./config.example.json")
-print sm.limits
-#sm.snapshot()
+sm.snapshot()
