@@ -9,21 +9,17 @@ class SnapManager(object):
         configs = json.load(open(filename,"r"))
 
         return SnapManager(configs["log_file"],
-                          configs["source_path"],
-                          configs["backup_path"])
+                           configs["source_path"],
+                           configs["backup_path"],
+                           configs["limits"])
         
-
-    def __init__(self,log_file,source_path,backup_path):
+    def __init__(self,log_file,source_path,backup_path,limits):
         self.log_file = log_file
         self.source_path = source_path
         self.backup_path = backup_path
         self.logs = snaplog.Snaplogs(self.log_file)
 
-        self.limits = {
-            "hour" : 4,
-            "day" : 1,
-            "week" : 4,
-        }
+        self.limits = limits
 
     def snapshot(self):
         prev = self.logs.get_latest("")
@@ -69,4 +65,5 @@ class SnapManager(object):
 
 #sm = SnapManager("/tmp/backup/log","/tmp/target","/tmp/backup/")
 sm = SnapManager.from_json("./config.example.json")
+print sm.limits
 #sm.snapshot()
