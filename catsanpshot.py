@@ -1,8 +1,18 @@
 from rsync import Rsync
 import snaplog
 import shutil
+import json
 
 class SnapManager(object):
+    @staticmethod
+    def from_json(filename):
+        configs = json.load(open(filename,"r"))
+
+        return SnapManager(configs["log_file"],
+                          configs["source_path"],
+                          configs["backup_path"])
+        
+
     def __init__(self,log_file,source_path,backup_path):
         self.log_file = log_file
         self.source_path = source_path
@@ -57,14 +67,6 @@ class SnapManager(object):
         else :
             log.labels.add("day")
 
-"""
-source_path = "/tmp/target"
-backup_path = "/tmp/backup/"
-log_file = "/tmp/backup/log"
-logs = snaplog.Snaplogs(log_file)
-
-hour_limit = 3
-"""
-
-sm = SnapManager("/tmp/backup/log","/tmp/target","/tmp/backup/")
-sm.snapshot()
+#sm = SnapManager("/tmp/backup/log","/tmp/target","/tmp/backup/")
+sm = SnapManager.from_json("./config.example.json")
+#sm.snapshot()
