@@ -1,9 +1,10 @@
-* auto_label (day,week,month ...)
-* config file (json)
+* auto_label (day,week,month ...) : doing
+* config file (json) : doing
 * work with schedule or crontab
+* work with plug&play media
 * support remote backup (ssh)
-* rename function name
 * comment
 * log
 * dry run
+* code better
 
