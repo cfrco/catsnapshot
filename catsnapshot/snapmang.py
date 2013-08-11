@@ -1,5 +1,5 @@
-from rsync import Rsync
-import snaplog
+from .rsync import Rsync
+from . import snaplog
 import shutil
 import json
 
