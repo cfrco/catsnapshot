@@ -90,4 +90,17 @@ class SnapManager(object):
 
 #sm = SnapManager("/tmp/backup/log","/tmp/target","/tmp/backup/")
 sm = SnapManager.from_json("./config.example.json")
-sm.snapshot()
+#sm.snapshot()
+
+def schedule_test():
+    def take_snapshot():
+        sm.snapshot()
+
+    import schedule,time
+    schedule.every(5).minutes.do(take_snapshot)
+
+    while True :
+        schedule.run_pending()
+        time.sleep(1)
+
+schedule_test()

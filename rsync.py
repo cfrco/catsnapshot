@@ -1,18 +1,19 @@
 import os
 
 RSYNC_CMD = "rsync -avP {0[dflags]} {0[flags]} {0[source]} {0[target]}"
+DEFAULT_FLAGS = ["--delete"]
 
 class Rsync(object):
     def __init__(self,source,target,link_dest=None,flags=""):
         self.args = {
             "source" : source,
             "target" : target,
-            "dflags" : "--delete",
+            "dflags" : " ".join(DEFAULT_FLAGS)+" ",
             "flags"  : flags,
         }
 
         if link_dest != None :
-            self.args["flags"] += "--link-dest={0}".format(link_dest)
+            self.args["dflags"] += "--link-dest={0} ".format(link_dest)
 
         self.generate()
         self.status = None
