@@ -6,6 +6,16 @@
         "node" : 3,
         "hour" : 4,
         "day"  : 1,
-        "week" : 4
+        "week" : 4,
+        "minute" : 2,
+        "second" : 3
+    },
+    "schedule-time" : {
+        "second" : 5 ,
+        "minute" : 1
+    },
+    "schedule-labels" : {
+        "second" : ["second"],
+        "minute" : ["minute"]
     }
 }

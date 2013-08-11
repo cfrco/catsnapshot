@@ -21,22 +21,24 @@ class SnapManager(object):
                            configs["source_path"],
                            configs["backup_path"],
                            configs["limits"] if "limits" in configs else {},
-                           configs["auto_labels"] if "auto_labels" in configs else None)
+                           configs["auto_labels"] if "auto_labels" in configs else None,
+                           configs)
         
-    def __init__(self,snaplog_file,source_path,backup_path,limits,auto_labels=None):
+    def __init__(self,snaplog_file,source_path,backup_path,limits,auto_labels=None,configs={}):
         self.snaplog_file = snaplog_file
         self.source_path = source_path
         self.backup_path = backup_path
         self.logs = snaplog.Snaplogs(self.snaplog_file)
 
         self.limits = limits
+        self.configs = configs
 
         if auto_labels== None :
             self.auto_labels = set(DEFAULT_AUTO_LABELS)
         else :
             self.auto_labels = set(auto_labels)
 
-    def snapshot(self):
+    def snapshot(self,labels=["node"],auto_write=True):
         prev = self.logs.get_latest("")
         prev_path = prev.path if prev!=None else None
         dt = snaplog.Snaplog.now()
@@ -46,13 +48,14 @@ class SnapManager(object):
         print r.cmd
         r.execute()
         
-        log = snaplog.Snaplog(path,dt,["node"])
+        log = snaplog.Snaplog(path,dt,labels)
         self.auto_label(log)
         self.logs.add(log)
         print log
 
         self.limit_check()
-        self.logs.write(self.snaplog_file)
+        if auto_write : self.logs.write(self.snaplog_file)
+        return log
 
     def limit_check(self): # check limits after take a snapshot
         for k,v in self.limits.items() :
@@ -89,9 +92,10 @@ class SnapManager(object):
                 log.labels.add(label)
 
 #sm = SnapManager("/tmp/backup/log","/tmp/target","/tmp/backup/")
-sm = SnapManager.from_json("./config.example.json")
+#sm = SnapManager.from_json("./config.example.json")
 #sm.snapshot()
 
+"""
 def schedule_test():
     def take_snapshot():
         sm.snapshot()
@@ -104,3 +108,4 @@ def schedule_test():
         time.sleep(1)
 
 schedule_test()
+"""

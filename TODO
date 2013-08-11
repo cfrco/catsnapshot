@@ -1,11 +1,10 @@
 * auto_label (day,week,month ...) : doing
 * config file (json) : doing
-* work with schedule or crontab
+* work with schedule : doing
+* exception and error handle : doing
 * work with plug&play media
 * support remote backup (ssh)
 * comment
 * log
 * dry run
 * code better
-* exception and error handle
-
