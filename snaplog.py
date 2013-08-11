@@ -21,7 +21,13 @@ def dt_str(dt):
 class Snaplog(object):
     @staticmethod
     def from_logstr(logstr):
+        logstr = logstr.strip().strip("\t")
+        if logstr == "" : #blank line
+            return None
+
         fields = logstr.split("\t")
+        if len(fields) != 4 : # invalid format
+            return None 
 
         return Snaplog(fields[2],dt_fromstr(fields[0]),fields[3].split(","))
 
@@ -54,7 +60,8 @@ class Snaplogs(object):
         self.logs = []
         with open(filename,"r") as fp :
             for line in fp :
-                self.logs += [Snaplog.from_logstr(line.strip())]
+                log = Snaplog.from_logstr(line.strip())
+                if log != None : self.logs += [log]
 
     def write(self,filename):
         with open(filename,"w") as fp :
