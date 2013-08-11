@@ -1,5 +1,6 @@
 from datetime import datetime
 from dateutil import tz
+import os,sys
 
 LOG_DATETIME_FORMAT = "%Y%m%d%H%M%S"
 LOG_FORMAT = "{0[utc_dt]}\t{0[local_dt]}\t{0[path]}\t{0[labels]}"
@@ -58,10 +59,17 @@ class Snaplogs(object):
 
     def read(self,filename):
         self.logs = []
-        with open(filename,"r") as fp :
-            for line in fp :
-                log = Snaplog.from_logstr(line.strip())
-                if log != None : self.logs += [log]
+        
+        if not os.path.exists(filename) :
+            return 
+        try :
+            with open(filename,"r") as fp :
+                for line in fp :
+                    log = Snaplog.from_logstr(line.strip())
+                    if log != None : self.logs += [log]
+        except IOError :
+            print("[Error] Can't open or create SnapLog file {0}".format(filename))
+            sys.exit(1)
 
     def write(self,filename):
         with open(filename,"w") as fp :

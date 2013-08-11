@@ -20,7 +20,7 @@ class SnapManager(object):
         return SnapManager(configs["snaplog_file"],
                            configs["source_path"],
                            configs["backup_path"],
-                           configs["limits"],
+                           configs["limits"] if "limits" in configs else {},
                            configs["auto_labels"] if "auto_labels" in configs else None)
         
     def __init__(self,snaplog_file,source_path,backup_path,limits,auto_labels=None):
