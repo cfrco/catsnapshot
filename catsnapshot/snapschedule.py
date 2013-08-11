@@ -59,7 +59,7 @@ def schedule_task(snapmang):
                     job.do(schedule_work,snapmang,["node"],index)
 
 # test
-from catsnapshot import SnapManager
-sm = SnapManager.from_json("./config.example.json")
-schedule_task(sm)
-schedule_loop()
+#from catsnapshot import SnapManager
+#sm = SnapManager.from_json("./config.example.json")
+#schedule_task(sm)
+#schedule_loop()
