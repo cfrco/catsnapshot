@@ -13,6 +13,12 @@ A tool using rsync to backup and manage in Python.
 See `example/config.json` for config file,and  
 See `example/backup.py` for auto-backup script(with `dbader/schedule`)
 
+Or, use `catsnapshot.py`
+
+    $ python catsnapshot.py -h # get help
+    $ python catsnapshot.py example/config.json
+
+
 ## TODO
 See `TODO`
 
