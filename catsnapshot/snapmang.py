@@ -33,9 +33,9 @@ class SnapManager(object):
         self.limits = limits
         self.configs = configs
 
-        if auto_labels== None :
+        if auto_labels== None:
             self.auto_labels = set(DEFAULT_AUTO_LABELS)
-        else :
+        else:
             self.auto_labels = set(auto_labels)
 
     def snapshot(self,labels=["node"],auto_write=True):
@@ -54,12 +54,12 @@ class SnapManager(object):
         print log
 
         self.limit_check()
-        if auto_write : self.logs.write(self.snaplog_file)
+        if auto_write: self.logs.write(self.snaplog_file)
         return log
 
     def limit_check(self): # check limits after take a snapshot
-        for k,v in self.limits.items() :
-            if self.logs.count(k) > v :
+        for k,v in self.limits.items():
+            if self.logs.count(k) > v:
                 removed_log = self.logs.get(k)[0]
                 removed_log.labels.remove(k)
 
@@ -72,12 +72,12 @@ class SnapManager(object):
             return False
 
         self.logs.remove(log)
-        if rmtree :
+        if rmtree:
             shutil.rmtree(log.path)
         return True
 
     def auto_label(self,log):
-        for label,autolabel in AUTO_LABELS.items() :
+        for label,autolabel in AUTO_LABELS.items():
             if not label in self.auto_labels:
                 continue
 
@@ -88,5 +88,5 @@ class SnapManager(object):
                 if self.remove(unlabel_log,check_label=True):
                     print "Remove : "+unlabel_log.path
                 log.labels.add(label)
-            else :
+            else:
                 log.labels.add(label)

@@ -23,11 +23,11 @@ class Snaplog(object):
     @staticmethod
     def from_logstr(logstr):
         logstr = logstr.strip().strip("\t")
-        if logstr == "" : #blank line
+        if logstr == "": # blank line
             return None
 
         fields = logstr.split("\t")
-        if len(fields) != 4 : # invalid format
+        if len(fields) != 4: # invalid format
             return None 
 
         return Snaplog(fields[2],dt_fromstr(fields[0]),fields[3].split(","))
@@ -52,27 +52,27 @@ class Snaplog(object):
 
 class Snaplogs(object):
     def __init__(self,filename=None):
-        if filename != None :
+        if filename != None:
             self.read(filename)
-        else :
+        else:
             self.logs = []
 
     def read(self,filename):
         self.logs = []
         
-        if not os.path.exists(filename) :
+        if not os.path.exists(filename):
             return 
-        try :
-            with open(filename,"r") as fp :
-                for line in fp :
+        try:
+            with open(filename,"r") as fp:
+                for line in fp:
                     log = Snaplog.from_logstr(line.strip())
                     if log != None : self.logs += [log]
-        except IOError :
+        except IOError:
             print("[Error] Can't open or create SnapLog file {0}".format(filename))
             sys.exit(1)
 
     def write(self,filename):
-        with open(filename,"w") as fp :
+        with open(filename,"w") as fp:
             for log in self.logs:
                 fp.write(str(log)+"\n")
 
@@ -93,7 +93,7 @@ class Snaplogs(object):
         out = []
         if label == "":
             return self.logs
-        elif label == None :
+        elif label == None:
             for log in self.logs:
                 if len(log.labels) == 0:
                     out += [log]

@@ -18,7 +18,7 @@ def schedule_loop(interval=1,scheduler=schedule.default_scheduler):
         scheduler.run_pending()
 
         # write snaplogs
-        for need_write in write_list :
+        for need_write in write_list:
             need_write.logs.write(need_write.snaplog_file)
 
         time.sleep(interval)
@@ -27,10 +27,10 @@ def schedule_work(snapmang,labels,index):
     global task_list
     global write_list
 
-    if task_list[index] == None :
+    if task_list[index] == None:
         task_list[index] = snapmang.snapshot(labels,auto_write=False)
         write_list += [snapmang] # add to write_list
-    else :
+    else:
         for label in labels:
             task_list[index].labels.add(label)
         snapmang.limit_check()
@@ -38,7 +38,7 @@ def schedule_work(snapmang,labels,index):
 def schedule_task(snapmang):
     global task_list
 
-    if "schedule-time" in snapmang.configs : 
+    if "schedule-time" in snapmang.configs: 
         schedule_time = snapmang.configs["schedule-time"]
         
         # add to task_list
@@ -46,7 +46,7 @@ def schedule_task(snapmang):
         index = len(task_list)-1
         
         # schedule 
-        for unit in schedule_time :
+        for unit in schedule_time:
             if unit in {"second","minute","hour","day"}:
                 job = schedule.every(int(schedule_time[unit]))
                 job.unit = unit+"s"
@@ -55,11 +55,5 @@ def schedule_task(snapmang):
                    unit in snapmang.configs["schedule-labels"]:
                     job.do(schedule_work,snapmang,
                            snapmang.configs["schedule-labels"][unit],index)
-                else :
+                else:
                     job.do(schedule_work,snapmang,["node"],index)
-
-# test
-#from catsnapshot import SnapManager
-#sm = SnapManager.from_json("./config.example.json")
-#schedule_task(sm)
-#schedule_loop()
