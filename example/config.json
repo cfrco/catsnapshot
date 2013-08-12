@@ -1,5 +1,5 @@
 {
-    "source_path" : "/tmp/target",
+    "source_path" : ["/tmp/target"],
     "backup_path" : "/tmp/backup/",
     "snaplog_file" : "/tmp/backup/log",
     "limits" : {

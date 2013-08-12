@@ -26,7 +26,7 @@ class SnapManager(object):
         
     def __init__(self,snaplog_file,source_path,backup_path,limits,auto_labels=None,configs={}):
         self.snaplog_file = snaplog_file
-        self.source_path = source_path
+        self.source_path = source_path if isinstance(source_path,list) else [source_path]
         self.backup_path = backup_path
         self.logs = snaplog.Snaplogs(self.snaplog_file)
 
@@ -44,9 +44,10 @@ class SnapManager(object):
         dt = snaplog.Snaplog.now()
         path = self.backup_path + snaplog.dt_logstr(dt)
         
-        r = Rsync(self.source_path,path,link_dest=prev_path)
-        print r.cmd
-        r.execute()
+        for sp in self.source_path:
+            r = Rsync(sp,path,link_dest=prev_path)
+            print r.cmd
+            r.execute()
         
         log = snaplog.Snaplog(path,dt,labels)
         self.auto_label(log)
