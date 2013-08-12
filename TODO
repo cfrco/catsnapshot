@@ -1,6 +1,5 @@
-* auto_label (day,week,month ...) : doing
-* config file (json) : doing
 * exception and error handle : doing
+* CLI tool : doing
 * multiple config files
 * work with plug&play media
 * support remote backup (ssh)
@@ -8,4 +7,3 @@
 * log
 * dry run
 * code better
-* CLI tool

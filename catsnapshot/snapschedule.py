@@ -1,4 +1,5 @@
 import time,schedule
+import signal,os,sys
 
 task_list = list()
 write_list = []
@@ -12,16 +13,39 @@ def clean_task_list():
 
     write_list = []
 
+class schedule_sig_handler(object):
+    def __init__(self,status):
+        self.status = status
+
+    def handler_func(self,signum,frame):
+        if self.status == "working":
+            self.status = "exit"
+        else:
+            sys.exit(0)
+
 def schedule_loop(interval=1,scheduler=schedule.default_scheduler):
+    sch_sig = schedule_sig_handler("idle")
+
+    # Set the signal handler
+    sigint_dh = signal.signal(signal.SIGINT,sch_sig.handler_func)
+    sigterm_dh = signal.signal(signal.SIGTERM,sch_sig.handler_func)
+
     while True:
+        sch_sig.status = "working"
         clean_task_list()
         scheduler.run_pending()
-
+        
         # write snaplogs
         for need_write in write_list:
             need_write.logs.write(need_write.snaplog_file)
 
+        if sch_sig.status == "exit": sys.exit(0)
+        else: sch_sig.status = "idle"
         time.sleep(interval)
+    
+    # Set signal handler to default handler
+    signal.signal(signal.SIGINT,sigint_dh)
+    signal.signal(signal.SIGTERM,sigterm_dh)
 
 def schedule_work(snapmang,labels,index):
     global task_list
