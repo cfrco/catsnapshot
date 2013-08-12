@@ -4,11 +4,12 @@ import shutil
 import json
 
 AUTO_LABELS = {
-    "day" : lambda l,n : l.dt.date() == n.dt.date(),
     "hour" : lambda l,n : l.dt.date() == n.dt.date() and\
                           l.dt.hour == n.dt.hour,
+    "day" : lambda l,n : l.dt.date() == n.dt.date(),
+    "week" : lambda l,n : l.dt.isocalendar()[:2] == n.dt.isocalendar()[:2],
     "month" : lambda l,n : l.dt.year == n.dt.year and\
-                           l.dt.month == n.dt.year,
+                           l.dt.month == n.dt.month,
 }
 DEFAULT_AUTO_LABELS = ["day","hour"]
 
