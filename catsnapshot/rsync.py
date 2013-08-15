@@ -3,6 +3,8 @@ import os
 RSYNC_CMD = "rsync -avP {0[dflags]} {0[flags]} {0[source]} {0[target]}"
 DEFAULT_FLAGS = ["--delete"]
 
+class RsyncError(Exception) : pass
+
 class Rsync(object):
     def __init__(self,source,target,link_dest=None,flags=""):
         self.args = {
@@ -24,9 +26,5 @@ class Rsync(object):
     def execute(self):
         self.status = os.system(self.cmd)
 
-#r = Rsync("/tmp/target","/tmp/backup/v1")
-#r = Rsync("/tmp/target","/tmp/backup/v1","/tmp/backup/v0")
-#r.cmd += " -n --stats"
-#print r.cmd
-
-#r.execute()
+        if self.status != 0:
+            raise RsyncError("rsync exit with status {0} : {1}".format(self.status,self.cmd))
