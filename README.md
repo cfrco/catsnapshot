@@ -1,4 +1,4 @@
-# CatSnapShot 
+# CatSnapshot
 A tool using rsync to backup and manage in Python.
 
 ## Features
