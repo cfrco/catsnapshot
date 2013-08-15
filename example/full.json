@@ -1,0 +1,18 @@
+{
+    "source_path" : ["/tmp/target"],
+    "backup_path" : "/tmp/backup/",
+    "snaplog_file" : "/tmp/backup/log",
+    "limits" : {
+        "node" : 3,
+        "hour" : 4,
+        "day"  : 1
+    },
+    "auto_labels" : ["day","hour","week"],
+    "schedule-time" : {
+        "minute" : 15
+    },
+    "schedule-labels" : {
+        "minute" : ["node"]
+    },
+    "check-path" : ["/media/usb1"]
+}
