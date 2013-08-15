@@ -47,9 +47,19 @@ def schedule_loop(interval=1,scheduler=schedule.default_scheduler):
     signal.signal(signal.SIGINT,sigint_dh)
     signal.signal(signal.SIGTERM,sigterm_dh)
 
+def schedule_check_path(snapmang):
+    if snapmang.check_path:
+        for path in snapmang.check_path:
+            if not os.path.exists(path):
+                return False
+    return True
+
 def schedule_work(snapmang,labels,index):
     global task_list
     global write_list
+
+    if schedule_check_path(snapmang) is False:
+        return 
 
     if task_list[index] == None:
         task_list[index] = snapmang.snapshot(labels,auto_write=False)

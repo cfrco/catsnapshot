@@ -39,6 +39,16 @@ class SnapManager(object):
         else:
             self.auto_labels = set(auto_labels)
 
+        # configs:check-path 
+        if "check-path" in self.configs:
+            check_path = self.configs["check-path"]
+            if isinstance(check_path,list):
+                self.check_path = check_path
+            else:
+                self.check_path = [check_path]
+        else:
+            self.check_path = None
+
     def snapshot(self,labels=["node"],auto_write=True):
         prev = self.logs.get_latest("")
         prev_path = prev.path if prev!=None else None

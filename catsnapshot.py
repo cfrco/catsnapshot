@@ -24,7 +24,7 @@ def main():
             continue
 
         # take the first snapshot
-        if sm.logs.count("") == 0 :
+        if snapsch.schedule_check_path(sm) and sm.logs.count("") == 0:
             sm.snapshot(["node"])
         snapsch.schedule_task(sm)
     
