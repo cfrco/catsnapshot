@@ -8,6 +8,12 @@ A tool using rsync to backup and manage in Python.
 * Use `label` as main element to manage `snapshot`.
 * Can limit the number of `snapshot` with specific `label`.
 * Work with `dbader/schedule` to take snapshot automatically.
+* Work with Plug&Play storage device (`check-path` and `feqcheck`)
+
+## Install
+#### Install Dependencies
+
+    $ sudo pip install schedule python-dateutil    
 
 ## Usage
 See `example/config.json` and `example/full.json` for config file,and  

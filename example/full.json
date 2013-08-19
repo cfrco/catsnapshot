@@ -14,5 +14,6 @@
     "schedule-labels" : {
         "minute" : ["node"]
     },
-    "check-path" : ["/media/usb1"]
+    "check-path" : ["/media/usb1"],
+    "feqcheck" : true
 }
