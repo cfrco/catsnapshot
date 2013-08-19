@@ -6,7 +6,7 @@ from catsnapshot import snapschedule as snapsch
 
 
 def main_init():
-    parser = argparse.ArgumentParser(description="CatSnapShot CLI tool")
+    parser = argparse.ArgumentParser(description="CatSnapshot CLI tool")
     parser.add_argument("-d",dest="daemon",action="store_true",help="daemonize")
     parser.add_argument("config_files",metavar="C",type=str,nargs="+",
                         help="config files")

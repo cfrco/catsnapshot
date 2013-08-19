@@ -7,10 +7,10 @@ A tool using rsync to backup and manage in Python.
 * Use plain text file as database(snaplog).
 * Use `label` as main element to manage `snapshot`.
 * Can limit the number of `snapshot` with specific `label`.
-* Work with `dbader/schedule` to take snapshot automatically.(need a few codes now)
+* Work with `dbader/schedule` to take snapshot automatically.
 
 ## Usage
-See `example/config.json` for config file,and  
+See `example/config.json` and `example/full.json` for config file,and  
 See `example/backup.py` for auto-backup script(with `dbader/schedule`)
 
 Or, use `catsnapshot.py`
