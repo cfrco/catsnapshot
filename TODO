@@ -1,6 +1,6 @@
 * exception and error handle : doing
 * CLI tool : doing
-* work with plug&play media : doing
+* daemon control
 * multiple config files
 * support remote backup (ssh)
 * comment
