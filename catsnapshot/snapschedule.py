@@ -45,6 +45,7 @@ def schedule_loop(interval=1,scheduler=schedule.default_scheduler):
 
         if sch_sig.status == "exit": sys.exit(0)
         else: sch_sig.status = "idle"
+        sys.stdout.flush()
         time.sleep(interval)
     
     # Set signal handler to default handler
