@@ -1,6 +1,9 @@
 * exception and error handle : doing
 * CLI tool : doing
 * daemon control
+  - reload
+  - snapshot
+* restore
 * multiple config files
 * support remote backup (ssh)
 * comment
