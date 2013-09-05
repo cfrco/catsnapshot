@@ -1,6 +1,6 @@
 import os
 
-RSYNC_CMD = "rsync -avP {0[dflags]} {0[flags]} {0[source]} {0[target]}"
+RSYNC_CMD = "rsync -av {0[dflags]} {0[flags]} {0[source]} {0[target]}"
 DEFAULT_FLAGS = ["--delete"]
 
 class RsyncError(Exception) : pass
