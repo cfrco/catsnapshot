@@ -8,6 +8,7 @@ from catsnapshot import snapschedule as snapsch
 def main_init():
     parser = argparse.ArgumentParser(description="CatSnapshot CLI tool")
     parser.add_argument("-d",dest="daemon",action="store_true",help="daemonize")
+    parser.add_argument("-s",dest="atstart",action="store_true",help="backup at start")
     parser.add_argument("config_files",metavar="C",type=str,nargs="+",
                         help="config files")
 
@@ -24,7 +25,8 @@ def main():
             continue
 
         # take the first snapshot
-        if snapsch.schedule_check_path(sm) and sm.logs.count("") == 0:
+        if (snapsch.schedule_check_path(sm) and sm.logs.count("") == 0) \
+           or args.atstart:
             sm.snapshot(["node"])
         snapsch.schedule_task(sm)
     
