@@ -24,10 +24,12 @@ def main():
             print e.strerror + " : " + config_file
             continue
 
-        # take the first snapshot
+        # take the first snapshot (when there is no snapshot or with `-s` option)
         if (snapsch.schedule_check_path(sm) and sm.logs.count("") == 0) \
            or args.atstart:
             sm.snapshot(["node"])
+
+        # schedule tasks
         snapsch.schedule_task(sm)
     
     if args.daemon:
@@ -43,7 +45,7 @@ def main():
         # decouple from parent environment
         os.chdir("/") 
         os.setsid() 
-        os.umask(0077)
+        os.umask(0077) # create files/dirs with permission 0700
 
         # do second fork
         try: 

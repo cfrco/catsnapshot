@@ -25,6 +25,7 @@ class SnapManager(object):
                            configs["auto_labels"] if "auto_labels" in configs else None,
                            configs)
         
+    # TODO : better __init__ function
     def __init__(self,snaplog_file,source_path,backup_path,limits,auto_labels=None,configs={}):
         self.snaplog_file = snaplog_file
         self.source_path = source_path if isinstance(source_path,list) else [source_path]
@@ -69,7 +70,8 @@ class SnapManager(object):
         if auto_write: self.logs.write(self.snaplog_file)
         return log
 
-    def limit_check(self): # check limits after take a snapshot
+    def limit_check(self): 
+        """ check limits after take a snapshot """
         for k,v in self.limits.items():
             if self.logs.count(k) > v:
                 removed_log = self.logs.get(k)[0]
@@ -79,7 +81,7 @@ class SnapManager(object):
                     print "Remove : "+removed_log.path
 
     def remove(self,log,check_label=False,rmtree=True):
-        # when check_label and log.labels is not empty ,do nothing
+        """ when check_label and log.labels is not empty ,do nothing """
         if check_label and len(log.labels) != 0: 
             return False
 
@@ -89,16 +91,19 @@ class SnapManager(object):
         return True
 
     def auto_label(self,log):
+        """ label a log automatically with pre-defined condition """
         for label,autolabel in AUTO_LABELS.items():
             if not label in self.auto_labels:
                 continue
 
             latest = self.logs.get_latest(label)
+
+            # check whether the previous log with the same label should be remove
             if latest!=None and latest.dt<=log.dt and autolabel(latest,log):
-                unlabel_log = self.logs.get_latest(label)
+                unlabel_log = latest
                 unlabel_log.labels.remove(label)
+
                 if self.remove(unlabel_log,check_label=True):
                     print "Remove : "+unlabel_log.path
-                log.labels.add(label)
-            else:
-                log.labels.add(label)
+            
+            log.labels.add(label)

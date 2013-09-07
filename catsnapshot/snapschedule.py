@@ -61,7 +61,6 @@ def schedule_check_path(snapmang):
     
 def schedule_rerun(job):
     """Run the job , but not reschedule it."""
-    #logger.info('Running job %s', job)
     job.job_func()
     job.last_run = datetime.datetime.now() # refresh last_run
 
@@ -75,15 +74,16 @@ def schedule_feqcheck_work():
 def schedule_work(snapmang,labels,index,job):
     global task_list
     global write_list
-
+    
+    # check-path
     if schedule_check_path(snapmang) is False:
         snapmang.latest_undone = job
         return 
 
-    if task_list[index] == None:
+    if task_list[index] == None: 
         task_list[index] = snapmang.snapshot(labels,auto_write=False)
         write_list += [snapmang] # add to write_list
-    else:
+    else: # if there is a snapshot in this time , just add label to it.(not take a new snapshot)
         for label in labels:
             task_list[index].labels.add(label)
         snapmang.limit_check()
@@ -91,6 +91,7 @@ def schedule_work(snapmang,labels,index,job):
     snapmang.latest_undone = None
 
 def schedule_task(snapmang):
+    """ add a task to the scheduler """
     global task_list
     global feqcheck_list
 
