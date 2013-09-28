@@ -1,15 +1,16 @@
 from .rsync import Rsync
 from . import snaplog
+from .snaplog import dt_tolocal as dt2lo
 import shutil
 import json
 
 AUTO_LABELS = {
-    "hour" : lambda l,n : l.dt.date() == n.dt.date() and\
-                          l.dt.hour == n.dt.hour,
-    "day" : lambda l,n : l.dt.date() == n.dt.date(),
-    "week" : lambda l,n : l.dt.isocalendar()[:2] == n.dt.isocalendar()[:2],
-    "month" : lambda l,n : l.dt.year == n.dt.year and\
-                           l.dt.month == n.dt.month,
+    "hour" : lambda l,n : dt2lo(l.dt).date() == dt2lo(n.dt).date() and\
+                          dt2lo(l.dt).hour == dt2lo(n.dt).hour,
+    "day" : lambda l,n : dt2lo(l.dt.date()) == dt2lo(n.dt.date()),
+    "week" : lambda l,n : dt2lo(l.dt).isocalendar()[:2] == dt2lo(n.dt).isocalendar()[:2],
+    "month" : lambda l,n : dt2lo(l.dt).year == dt2lo(n.dt).year and\
+                           dt2lo(l.dt).month == dt2lo(n.dt).month,
 }
 DEFAULT_AUTO_LABELS = ["day","hour"]
 
