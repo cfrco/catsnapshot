@@ -7,7 +7,7 @@ import json
 AUTO_LABELS = {
     "hour" : lambda l,n : dt2lo(l.dt).date() == dt2lo(n.dt).date() and\
                           dt2lo(l.dt).hour == dt2lo(n.dt).hour,
-    "day" : lambda l,n : dt2lo(l.dt.date()) == dt2lo(n.dt.date()),
+    "day" : lambda l,n : dt2lo(l.dt).date() == dt2lo(n.dt).date(),
     "week" : lambda l,n : dt2lo(l.dt).isocalendar()[:2] == dt2lo(n.dt).isocalendar()[:2],
     "month" : lambda l,n : dt2lo(l.dt).year == dt2lo(n.dt).year and\
                            dt2lo(l.dt).month == dt2lo(n.dt).month,
