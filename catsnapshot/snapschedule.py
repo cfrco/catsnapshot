@@ -69,6 +69,7 @@ def schedule_feqcheck_work():
 
     for snapmang in feqcheck_list:
         if snapmang.latest_undone!=None and schedule_check_path(snapmang):
+            sleep(10) # waiting device
             schedule_rerun(snapmang.latest_undone)
 
 def schedule_work(snapmang,labels,index,job):
