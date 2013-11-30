@@ -69,7 +69,7 @@ def schedule_feqcheck_work():
 
     for snapmang in feqcheck_list:
         if snapmang.latest_undone!=None and schedule_check_path(snapmang):
-            sleep(10) # waiting device
+            time.sleep(30) # waiting device
             schedule_rerun(snapmang.latest_undone)
 
 def schedule_work(snapmang,labels,index,job):
@@ -81,6 +81,7 @@ def schedule_work(snapmang,labels,index,job):
         snapmang.latest_undone = job
         return 
 
+    snapmang.logs.read(snapmang.snaplog_file) # keep the logs are current version.
     if task_list[index] == None: 
         task_list[index] = snapmang.snapshot(labels,auto_write=False)
         write_list += [snapmang] # add to write_list
